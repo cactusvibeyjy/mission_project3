@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.dao2.MemberDao">
+
+    <!-- 목록 -->
+    <select id="memberList" parameterType="com.example.dto.MemberDto" resultType="com.example.dto.MemberDto">
+        SELECT *
+            FROM MEMBER
+        WHERE 1=1
+        <if test='memberId != null and memberId != ""'>
+            AND   MEMBER_ID 	= #{memberId}
+        </if>
+        <if test='memberNm != null and memberNm != ""'>
+            AND   MEMBER_NM 	= #{memberNm}
+        </if>
+        <if test='startDate != null and startDate != ""'>
+            AND   START_DATE 	= #{startDate}
+        </if>
+        <if test='endDate != null and endDate != ""'>
+            AND   END_DATE 	= #{endDate}
+        </if>
+        <if test='sex != null and sex != ""'>
+            AND   SEX 			= #{sex}
+        </if>
+        <if test='country != null and country != "none"'>
+            AND   COUNTRY 		= #{country}
+        </if>
+        <if test='city != null and city != "none"'>
+            AND   CITY 		= #{city}
+        </if>
+        ORDER BY START_DATE DESC
+    </select>
+    <!-- 상세 -->
+    <select id="memberDetail" parameterType="string" resultType="com.example.dto.MemberDto">
+        SELECT *
+            FROM MEMBER
+        WHERE MEMBER_ID = #{memberId}
+    </select>
+    <!-- 등록 -->
+    <insert id="memberInsert" parameterType="com.example.dto.MemberDto">
+        INSERT INTO MEMBER
+            (
+                MEMBER_ID, MEMBER_NM, START_DATE, SEX ,
+                COUNTRY, CITY
+            )
+        VALUES
+            (
+                #{memberId}, #{memberNm}, TO_CHAR(SYSDATE,'YYYY-MM-DD'), #{sex} ,
+                #{country}, #{city}
+            )
+    </insert>
+    <!-- 수정 -->
+    <update id="memberUpdate" parameterType="com.example.dto.MemberDto">
+        UPDATE MEMBER
+            SET MEMBER_ID   = #{memberId},
+                MEMBER_NM   = #{memberNm},
+                START_DATE  = TO_CHAR(SYSDATE,'YYYY-MM-DD'),
+                SEX         = #{sex} ,
+                COUNTRY     = #{country} ,
+                CITY        = #{city}
+        WHERE MEMBER_ID     = #{modifyId}
+    </update>
+    <!-- 삭제 -->
+    <delete id="memberDelete" parameterType="com.example.dto.MemberDto">
+        DELETE FROM MEMBER
+        WHERE MEMBER_ID IN
+                    <foreach collection="memberIdArr" item="memberId" index="index" open="(" close=")" separator=",">
+                        #{memberId}
+                    </foreach>
+    </delete>
+
+</mapper>

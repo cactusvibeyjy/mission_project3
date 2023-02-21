@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- 60초마다 설정 파일의 변경을 확인 하여 변경시 갱신 -->
+<configuration scan="true" scanPeriod="60 seconds">
+
+    <property name="LOG_PATH" value="/home/temp/log" />
+    <property name="LOG_FILE_NAME" value="dev_log" />
+    <property name="ERR_LOG_FILE_NAME" value="err_log" />
+    <property name="LOG_PATTERN" value="%d{HH:mm:ss.SSS} [%thread] %-5level %logger - %msg%n" />
+    <property name="APP_LOG_PATTERN" value="%d{HH:mm:ss.SSS} [%thread] %-5level %msg%n" />
+    <property name="SQL_LOG_PATTERN" value="SQL %-5level     %msg%n" />
+
+    <!-- Console Appender -->
+    <appender name="LOG_CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <pattern>${LOG_PATTERN}</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="APP_CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <pattern>${APP_LOG_PATTERN}</pattern>
+        </encoder>
+    </appender>
+    
+    <appender name="SQL_CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <pattern>${SQL_LOG_PATTERN}</pattern>
+        </encoder>
+    </appender>
+
+
+    <!-- File Appender -->
+    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>DEBUG</level>
+        </filter>
+        <file>${LOG_PATH}/${LOG_FILE_NAME}.log</file>
+
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <pattern>${SQL_LOG_PATTERN}</pattern>
+        </encoder>
+
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!-- .gz,.zip 등을 넣으면 자동 일자별 로그파일 압축 -->
+            <fileNamePattern>${LOG_PATH}/${LOG_FILE_NAME}.%d{yyyy-MM-dd}_%i.log</fileNamePattern>
+
+            <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <maxFileSize>10MB</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+
+            <maxHistory>30</maxHistory>
+        </rollingPolicy>
+    </appender>
+
+
+    <!-- 에러로그 별도 로그파일 생성 -->
+    <appender name="ERROR_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>error</level>
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>DENY</onMismatch>
+        </filter>
+
+        <file>${LOG_PATH}/${ERR_LOG_FILE_NAME}.log</file>
+
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <pattern>${LOG_PATTERN}</pattern>
+        </encoder>
+
+        <!-- Rolling 정책 -->
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!-- .gz,.zip 등을 넣으면 자동 일자별 로그파일 압축 -->
+            <fileNamePattern>${LOG_PATH}/${ERR_LOG_FILE_NAME}.%d{yyyy-MM-dd}_%i.log</fileNamePattern>
+
+            <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <maxFileSize>10MB</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+            <maxHistory>90</maxHistory>
+
+        </rollingPolicy>
+    </appender>
+
+    <logger name="org.springframework" level="OFF" additivity="false"></logger>
+
+    <logger name="org.springframework.web" level="OFF" additivity="false"></logger>
+
+    <logger name="org.apache.xerces.parsers" level="OFF" additivity="false"></logger>
+
+    <logger name="org.springframework.web.servlet.view.tiles3.TilesView" level="OFF" additivity="false"></logger>
+
+    <logger name="org.apache.commons.dbcp2" level="OFF"></logger>
+
+    <logger name="java.sql" level="OFF"></logger>
+
+    <logger name="jdbc.sqlonly" level="DEBUG">
+    	<appender-ref ref="LOG_CONSOLE" />
+	</logger>
+
+    <logger name="jdbc.resultsettable" level="OFF"></logger>
+
+    <logger name="jdbc.sqltiming" level="OFF"></logger>
+
+    <logger name="jdbc.audit" level="OFF"></logger>
+    
+    <logger name="org.apache.commons" level="OFF"></logger>
+
+    <root level="DEBUG">
+        <appender-ref ref="LOG_CONSOLE" />
+    </root>
+
+</configuration>

@@ -1,4 +1,3 @@
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="중국"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ page session="false"%>
@@ -26,6 +25,12 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/exceljs/4.3.0/exceljs.min.js"></script>
   <script lang="javascript" src="https://cdn.sheetjs.com/xlsx-0.19.2/package/dist/xlsx.full.min.js"></script>
 
+
+  <style type="text/css">
+  .SumoSelect .select-all{
+	  height: 40px;
+	}
+  </style>
   <title>야호</title>
 
 </head>
@@ -72,26 +77,31 @@
       <button class="excelButton clickedButton" onclick="fn_excel()" style="border-radius: 10px;">
         <span>엑셀다운</span> <i class="zmdi zmdi-arrow-right"></i>
       </button>
-      <button class="editButton" onclick="fn_edit()" style="border-radius: 10px;">
-        <span>수정하기</span> <i class="zmdi zmdi-arrow-right"></i>
-      </button>
       <button class="deleteButton" onclick="fn_delete()" style="border-radius: 10px;">
         <span>삭제하기</span> <i class="zmdi zmdi-arrow-right"></i>
       </button>
     </div>
   </div>
   <div class="list" style="margin: 50px 80px 50px 50px;">
-    <table class="table" style="border: 3px;" id="members">
+    <table class="table table-fixed" style="border: 3px;" id="members">
       <thead>
         <tr>
           <th scope="col">
             <input type="checkbox" id="allCheck" onchange="fn_allCheck(this)" />
             <label for="allCheck">선택</label>
           </th>
-          <th scope="col">아이디</th>
-          <th scope="col">이름</th>
+          <th rowspan="2" scope="col">아이디</th>
+          <th rowspan="2" scope="colgroup">이름</th>
+          <th rowspan="2" scope="colgroup">성별</th>
+          <th colspan="2" scope="colgroup">장소</th>
+          
+          <!-- <th rowspan="2" scope="col">이름</th>
           <th scope="col">성별</th>
           <th scope="col">국가</th>
+          <th scope="col">도시</th> -->
+        </tr>
+        <tr>
+   	      <th scope="col">국가</th>
           <th scope="col">도시</th>
         </tr>
       </thead>
@@ -101,8 +111,8 @@
     </table>
     <input type="hidden" id="modifyId" />
   </div>
-  <!-- 팝업 기능 주석 -->
-  <!--
+<!-- 팝업 수정 창 -->
+  
 <div class="pop">
   <div class="info">
 
@@ -149,16 +159,16 @@
       </tr>
       </tbody>
     </table>
-
+	
     <div class="bottom">
       <div class="button_area">
         <button type="button" onclick="fn_save('m')">저장</button>
-        <button type="button" onclick="fn_hide()">닫기</button>
+        <button type="button" onclick="fn_cancel()">닫기</button>
       </div>
     </div>
   </div>
 </div>
- -->
+
 
 </body>
 <script type="text/javascript">
@@ -188,7 +198,7 @@ var fn_dupCheck = function(tag) {
 
 }
 
-var fn_hide = function() {
+var fn_cancel = function() {
   $('.pop.on').removeClass('on');
 }
 
@@ -208,7 +218,7 @@ var fn_addRow = function() {
   addTr += '  <input type="radio" name="sSex' + newRowNum + '" id="sFemale" value="female" onchange="sexChange(this)"/><label for="sFemale">여</label>';
   addTr += '</td>';
   addTr += '<td>';
-  addTr += '  <select name="sCountry' + newRowNum + '" id="sCountry" onchange="changeCountry(this.value, \'sCity' + newRowNum + '\')">';
+  addTr += '  <select name="aCountry' + newRowNum + '" id="aCountry" onchange="changeCountry(this.value, \'aCity' + newRowNum + '\')">';
   addTr += '      <option value="none" selected>국가</option>';
   addTr += '      <option value="한국">한국</option>';
   addTr += '      <option value="미국">미국</option>';
@@ -217,14 +227,14 @@ var fn_addRow = function() {
   addTr += '  </select>';
   addTr += '</td>';
   addTr += '<td>';
-  addTr += '  <select name="sCity' + newRowNum + '" id="sCity' + newRowNum + '" multiple>';
+  addTr += '  <select name="aCity' + newRowNum + '" id="aCity' + newRowNum + '" multiple>';
   addTr += '      <option value="none" selected>도시</option>';
   addTr += '  </select>';
   addTr += '</td>';
   addTr += '</tr>';
   $('#data_tbody').prepend(addTr);
 
-  $('#sCity' + newRowNum).SumoSelect();
+  $('#aCity' + newRowNum).SumoSelect({ selectAll: true, locale :  ['OK', 'Cancel', '전체'] });
 }
 
 // 초기화
@@ -264,7 +274,7 @@ var fn_list = function() {
       for (var data of res) {
         var html = '';
         if (data.sex == 'male') {
-          html += "<tr class='table-active' onclick='editRow(this)'>";
+          html += "<tr class='table-active' ondblclick='editRow(this)'>";
         } else {
           html += "<tr onclick='editRow(this)''>";
         }
@@ -306,8 +316,56 @@ var fn_detail = function(memberId) {
     }
   });
 }
-
 //저장
+var fn_save = function (flag) {
+
+	var param = {};
+	param.memberId  = $('#'+flag+'MemberId').val();
+	param.memberNm  = $('#'+flag+'MemberNm').val();
+    param.country   = $('#'+flag+'Country').val();
+    param.city      = $('#'+flag+'City').val();
+
+    var url = 'insert.json';
+	if(flag === 'm') {
+        param.sex       = $('input[name=mSex]:checked').val();
+        param.modifyId  = $('#modifyId').val();
+        url             = 'update.json';
+	} else {
+        if($('#sMemberId').length < 1) {
+            return alert('[추가]버튼 클릭 후 작업하세요.');
+        }
+        param.sex       = $('input[name=sSex]:checked').val();
+	}
+
+	if(param.memberId === '') {
+	    return alert('아이디를 입력해주세요.');
+	}
+	if(param.memberNm === '') {
+	    return alert('이름을 입력해주세요.');
+	}
+	if(param.country === 'none') {
+	    return alert('국가를 선택해주세요.');
+	}
+	if(param.city === 'none') {
+	    return alert('도시를 선택해주세요.');
+	}
+
+    $.ajax({
+        url	:'/member/'+url,
+        type:'POST',
+        data:param,
+	    success: function(res) {
+	        if(res === 1) {
+                fn_list();
+                if(flag === 'm') {
+                    fn_cancel()
+                }
+	            return alert('저장되었습니다.');
+	        }
+        }
+    });
+}
+/* //저장
 var fn_save = function(flag) {
 
   let items = $('table').find('.newRowNum');
@@ -318,8 +376,8 @@ var fn_save = function(flag) {
     let addItem = {};
     addItem.memberId = $(item).find('#sMemberId').val();
     addItem.memberNm = $(item).find('#sMemberNm').val();
-    addItem.country = $(item).find('#sCountry').val();
-    addItem.city = $(item).find("[id^='sCity']").val() + "";
+    addItem.country = $(item).find('#aCountry').val();
+    addItem.city = $(item).find("[id^='aCity']").val() + "";
     if ($(item).find('#sMale').is(":checked")) {
       addItem.sex = 'male';
     } else {
@@ -350,35 +408,11 @@ var fn_save = function(flag) {
     addItems.push(addItem);
 
   });
-  if (check) {
-    $.ajax({
-      url: '/member/insert.json',
-      type: 'POST',
-      data: {
-        params: addItems
-      },
-      data: JSON.stringify(addItems),
-      contentType: 'application/json',
-      success: function(res) {
-        if (res >= 1) {
-          fn_list();
-          if (flag === 'm') {
-            fn_hide()
-          }
-          return alert('저장되었습니다.');
-        }
-      }
-    });
-  }
-}
-//수정
-var fn_edit = function() {
 
-  let items = $('table').find('.editRow');
+  let editTableitems = $('table').find('.editRow');
   let editItems = [];
-  let check = true;
 
-  items.each(function(i, item) {
+  editTableitems.each(function(i, item) {
     let editItem = {};
     editItem.memberId = $(item).find('#sMemberId').val();
     editItem.modifyId = $(item).find('#sModifyId').val();
@@ -390,7 +424,7 @@ var fn_edit = function() {
     }
     editItem.country = $(item).find('#sCountry').val();
     editItem.city = $(item).find("[id^='sCity']").val() + "";
-
+    console.log("editItem.city", editItem.city);
     if (editItem.modifyId === '') {
       alert('아이디를 입력해주세요.');
       check = false;
@@ -413,27 +447,52 @@ var fn_edit = function() {
     }
 
     editItems.push(editItem);
-
   });
+
   if (check) {
-    $.ajax({
-      url: '/member/update.json',
-      type: 'POST',
-      data: {
-        params: editItems
-      },
-      data: JSON.stringify(editItems),
-      contentType: 'application/json',
-      success: function(res) {
-        if (res >= 1) {
-          fn_list();
-          fn_hide()
-          return alert('수정되었습니다.');
-        }
-      }
-    });
+
+  	if(addItems.length > 0){
+	    $.ajax({
+	      url: '/member/insert.json',
+	      type: 'POST',
+	      data: {
+	        params: addItems
+	      },
+	      data: JSON.stringify(addItems),
+	      contentType: 'application/json',
+	      success: function(res) {
+	        if (res >= 1) {
+	        	fn_cancel();
+	          fn_list();
+	          if(editItems.length == 0){
+	          	alert("저장하였습니다.");
+	          }
+	        }
+	      }
+	    });
+  	}
+
+  	if(editItems.length > 0){
+	    $.ajax({
+	      url: '/member/update.json',
+	      type: 'POST',
+	      data: {
+	        params: editItems
+	      },
+	      data: JSON.stringify(editItems),
+	      contentType: 'application/json',
+	      success: function(res) {
+	        if (res >= 1) {
+	        	fn_cancel();
+	          fn_list();
+	          alert("저장하였습니다.");
+	        }
+	      }
+	    });
+  	}
   }
-}
+} */
+
 
 // 삭제
 var fn_delete = function() {
@@ -521,7 +580,7 @@ function changeCountry(contryName, countryId) {
     targetTag.appendChild(opt);
   }
   if (countryId !== "city") {
-    $('#' + countryId).SumoSelect().sumo.reload();
+    $('#' + countryId).SumoSelect({ selectAll: true, locale :  ['OK', 'Cancel', '전체'] }).sumo.reload();
   }
 
 }
@@ -578,7 +637,7 @@ function editRow(obj) {
     cityHtml += '      <option value="none" selected>도시</option>';
     cityHtml += '  </select>';
     $(obj).find('td:eq(5)').append(cityHtml);
-    $('#sCity' + trNum).SumoSelect();
+    $('#sCity' + trNum).SumoSelect({ selectAll: true, locale :  ['OK', 'Cancel', '전체'] });
     changeCountry(tempCountry, 'sCity' + trNum);
     const tempCitys = tempCity.split(",")
     $.each(tempCitys, function(i, item) {
@@ -589,7 +648,7 @@ function editRow(obj) {
 
 //페이징
 function paging() {
-  var rowPerPage = 20;
+  var rowPerPage = 5;
   $('#nav').remove();
   var $members = $('#members');
   $members.after('<div id="nav" style="margin: auto;">');

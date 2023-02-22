@@ -1,0 +1,36 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
+<%@ page session="false"%>
+<html>
+<head>
+<meta charset="utf-8">
+<title>상세</title>
+
+</head>
+
+<body>
+	
+	<div class="list" style="margin: 50px 80px 50px 50px">
+		<table class="table" style="border: 3px;" id="members">
+			<thead>
+				<tr>
+					<th rowspan="2" scope="col"><input type="checkbox"
+						id="allCheck" onchange="fn_allCheck(this)" /> <label
+						for="allCheck">선택</label></th>
+					<th rowspan="2" scope="col">아이디</th>
+					<th rowspan="2" scope="colgroup">이름</th>
+					<th rowspan="2" scope="colgroup">성별</th>
+					<th colspan="2" scope="colgroup">장소</th>
+				</tr>
+				<tr>
+					<th scope="col">국가</th>
+					<th scope="col">도시</th>
+				</tr>
+			</thead>
+			<tbody id="data_tbody">
+			</tbody>
+		</table>
+		<input type="hidden" id="modifyId" />
+	</div>
+</body>
+</html>

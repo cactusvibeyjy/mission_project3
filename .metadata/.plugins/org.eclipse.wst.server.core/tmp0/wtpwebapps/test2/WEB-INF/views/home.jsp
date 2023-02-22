@@ -3,109 +3,143 @@
 <%@ page session="false"%>
 <html>
 <head>
-	<meta charset="utf-8">
-  <link
-      href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css"
-      rel="stylesheet"
-      integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3"
-      crossorigin="anonymous">
-  <link href="/css/styles.css" rel="stylesheet">
-  <link href="/js/jquery-sumoselect/sumoselect.min.css" rel="stylesheet">
+<meta charset="utf-8">
+<link
+	href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css"
+	rel="stylesheet"
+	integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3"
+	crossorigin="anonymous">
+<link href="/css/styles.css" rel="stylesheet">
+<link href="/js/jquery-sumoselect/sumoselect.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css" integrity="sha512-SzlrxWUlpfuzQ+pcUCosxcglQRNAq/DZjVsC0lE40xsADsfeQoEypE+enwcOiGjk/bSuGGKHEyjSoQ1zVisanQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
-
-  <script
-      src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
-      integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
-      crossorigin="anonymous">
+<script
+	src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+	integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
+	crossorigin="anonymous">
   </script>
-  <script src="https://code.jquery.com/jquery-3.6.3.min.js"></script>
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-  <script src="/js/jquery-sumoselect/jquery.sumoselect.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.3.min.js"></script>
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="/js/jquery-sumoselect/jquery.sumoselect.min.js"></script>
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/exceljs/4.3.0/exceljs.min.js"></script>
-  <script lang="javascript" src="https://cdn.sheetjs.com/xlsx-0.19.2/package/dist/xlsx.full.min.js"></script>
+<script
+	src="https://cdnjs.cloudflare.com/ajax/libs/exceljs/4.3.0/exceljs.min.js"></script>
+<script lang="javascript"
+	src="https://cdn.sheetjs.com/xlsx-0.19.2/package/dist/xlsx.full.min.js"></script>
 
 
-  <style type="text/css">
-  .SumoSelect .select-all{
-	  height: 40px;
-	}
-  </style>
-  <title>야호</title>
+<style type="text/css">
+.SumoSelect .select-all {
+	height: 40px;
+}
+</style>
+<title>야호</title>
 
 </head>
 <body>
-  <h2></h2>
+	<h2></h2>
+	<div class="mainContainer">
+		<div class="container" style="margin-top: 80px; margin-bottom: 220px">
+			<div>
+				<input type="text" id="memberId" placeholder="아이디"
+					class="form-control"  value=""
+					style="width: 200px; margin: 10px;  float: left" /> <input
+					type="text" id="memberNm" placeholder="이름" class="form-control"
+					style="width: 200px; margin: 10px; float: left" />
+			</div>
+			<div class="sex" style="margin-left: 100px; margin-bottom: 10px; float: left">
+				<input type="radio" name="sex" id="sexM" value="male"
+					onchange="fn_list()" /> <label for="sexM">남성</label> <input
+					type="radio" name="sex" id="sexF" value="female"
+					onchange="fn_list()" /> <label for="sexF">여성</label>
+			</div>
+			<div class="languages" style="margin-right: 300px; float: right">
+				<input type="radio" name="language" id="krLang" value="korean"
+					onchange="" /> <label for="krLang">한국어</label> <input
+					type="radio" name="language" id="enLang" value="english"
+					onchange="" /> <label for="enLang">English</label>
+			</div>
 
-  <div class="container" style="margin-top: 80px">
-    <div>
-      <input type="text" id="memberId" placeholder="아이디" class="form-control" onfocusout="fn_dupCheck(this)" value="" style="width: 200px; margin-bottom:10px" />
-      <input type="text" id="memberNm" placeholder="이름" class="form-control" style="width: 200px; margin-bottom:10px" />
-    </div>
-    <div class="daterange" style="margin-top: 25px">
-      <input type="date" name="startDate" id="startDate" />
-      <input type="date" name="endDate" id="endDate" />
-    </div>
-    <div class="sex" style="margin-top:10px; margin-bottom:10px;">
-      <input type="radio" name="sex" id="sexM" value="male" onchange="fn_list()" />
-      <label for="sexM">남성</label>
-      <input type="radio" name="sex" id="sexF" value="female" onchange="fn_list()" />
-      <label for="sexF">여성</label>
-    </div>
+			</div>
+			<select class="countryCss" name="country" id="country" onchange="changeCountry(this.value,'city')" >
+					<option value="none" selected>국가</option>
+					<option value="한국">한국</option>
+					<option value="미국">미국</option>
+					<option value="중국">중국</option>
+					<option value="일본">일본</option>
+			</select> 
+			<select id="city" multiple>
+					<option value="none" selected>도시</option>
+			</select>
+			
+			
+			<div class="daterange" style="margin-right: 600px;margin-bottom: 30px;  float: right">
+				<input type="date" name="startDate" id="startDate" /> <input
+					type="date" name="endDate" id="endDate" />
+			</div>
+		
 
-    <select name="country" id="country" onchange="changeCountry(this.value,'city')">
-      <option value="none" selected>국가</option>
-      <option value="한국">한국</option>
-      <option value="미국">미국</option>
-      <option value="중국">중국</option>
-      <option value="일본">일본</option>
-    </select>
-    <select id="city" multiple>
-      <option value="none" selected>도시</option>
-    </select>
-    <br>
-    <div class="button" style="margin-top:10px; border-radius: 20px;">
-      <button class="registerButton clickedButton" onclick="fn_addRow(this)" style="border-radius: 10px;">
-        <span>추가하기</span> <i class="zmdi zmdi-arrow-right"></i>
-      </button>
-      <button class="registerButton clickedButton" onclick="fn_save('s')" style="border-radius: 10px;">
-        <span>저장하기</span> <i class="zmdi zmdi-arrow-right"></i>
-      </button>
-      <button class="searchButton clickedButton" onclick="fn_list()" style="border-radius: 10px;">
-        <span>조회하기</span> <i class="zmdi zmdi-arrow-right"></i>
-      </button>
-      <button class="excelButton clickedButton" onclick="fn_excel()" style="border-radius: 10px;">
-        <span>엑셀다운</span> <i class="zmdi zmdi-arrow-right"></i>
-      </button>
-      <button class="deleteButton" onclick="fn_delete()" style="border-radius: 10px;">
-        <span>삭제하기</span> <i class="zmdi zmdi-arrow-right"></i>
-      </button>
-    </div>
-  </div>
-  <div class="list" style="margin: 50px 80px 50px 50px; height:50%; overflow-y:auto;">
-    <table class="table" style="border: 3px;" id="members">
-      <thead>
-        <tr>
-          <th scope="col">
-            <input type="checkbox" id="allCheck" onchange="fn_allCheck(this)" />
-            <label for="allCheck">선택</label>
-          </th>
-          <th scope="col">아이디</th>
-          <th scope="col">이름</th>
-          <th scope="col">성별</th>
-          <th scope="col">국가</th>
-          <th scope="col">도시</th>
-        </tr>
-      </thead>
-      <tbody id="data_tbody">
-      </tbody>
-    </table>
-    <input type="hidden" id="modifyId" />
-  </div>
-  <!-- 팝업 기능 주석 -->
-  <!--
+	  </div>	
+	
+	
+
+	<div class="button" style="margin-top: 30px; border-radius: 20px; margin-left: 1000px">
+		<button class="registerButton clickedButton" onclick="fn_addRow(this)"
+			style="border-radius: 10px;">
+			<span>추가하기</span> <i class="zmdi zmdi-arrow-right"></i>
+		</button>
+		<button class="registerButton clickedButton" onclick="fn_save('s')"
+			style="border-radius: 10px;">
+			<span>저장하기</span> <i class="zmdi zmdi-arrow-right"></i>
+		</button>
+		<button class="searchButton clickedButton" onclick="fn_list()"
+			style="border-radius: 10px;">
+			<span>조회하기</span> <i class="zmdi zmdi-arrow-right"></i>
+		</button>
+		<button class="excelButton clickedButton" onclick="fn_excel()"
+			style="border-radius: 10px;">
+			<span>엑셀다운</span> <i class="zmdi zmdi-arrow-right"></i>
+		</button>
+		<button class="deleteButton" onclick="fn_delete()"
+			style="border-radius: 10px;">
+			<span>삭제하기</span> <i class="zmdi zmdi-arrow-right"></i>
+		</button>
+	</div>
+	
+	<div class="list" style="margin: 50px 80px 50px 50px">
+		<table class="table" style="border: 3px;" id="members">
+			<thead>
+				<tr>
+					<th rowspan="2" scope="col"><input type="checkbox"
+						id="allCheck" onchange="fn_allCheck(this)" /> <label
+						for="allCheck">선택</label></th>
+					<th rowspan="2" scope="col">아이디</th>
+					<th rowspan="2" scope="colgroup">이름</th>
+					<th rowspan="2" scope="colgroup">성별</th>
+					<th colspan="2" scope="colgroup">장소</th>
+				</tr>
+				<tr>
+					<th scope="col">국가</th>
+					<th scope="col">도시</th>
+				</tr>
+			</thead>
+			<tbody id="data_tbody">
+			</tbody>
+		</table>
+		<input type="hidden" id="modifyId" />
+	</div>
+	
+
+	<!-- 팝업 기능 -->
+	
 <div class="pop">
   <div class="info">
+  <div class="top_link" >
+		<div class="link_area" style="float: right">
+		<button type="button" onclick="">Link</button>
+		</div>
+	</div>
 
     <table>
       <colgroup>
@@ -133,7 +167,7 @@
       <tr>
         <th>국가</th>
         <td>
-          <select id="mCountry" onchange="Change(this,`mCity`)">
+          <select id="country" onchange="changeCountry(this.value,'city')">
             <option value="none" selected>국가</option>
             <option value="한국">한국</option>
             <option value="미국">미국</option>
@@ -145,12 +179,12 @@
       <tr>
         <th>도시</th>
         <td>
-          <select id="mCity"></select>
+          <select id="city" multiple></select>
         </td>
       </tr>
       </tbody>
     </table>
-
+	
     <div class="bottom">
       <div class="button_area">
         <button type="button" onclick="fn_save('m')">저장</button>
@@ -159,7 +193,7 @@
     </div>
   </div>
 </div>
- -->
+
 
 </body>
 <script type="text/javascript">
@@ -245,6 +279,39 @@ var fn_reset = function() {
 }
 
 // 목록
+/* var fn_list = function () {
+    var param = {};
+    param.memberId  = $('#memberId').val();
+    param.memberNm  = $('#memberNm').val();
+    param.startDate = $('#startDate').val().replaceAll('-','');
+    param.endDate   = $('#endDate').val().replaceAll('-','');
+    param.sex       = $('input[name=sex]:checked').val();
+    param.country   = $('#country').val();
+    param.city      = $('#city').val();
+	
+    $.ajax({
+        url	:'/member/list.json',
+        type:'POST',
+        data:param,
+        success: function(res) {
+
+            $('#data_tbody').empty();
+
+            for(var data of res) {
+                var html = '<tr>';
+                html += '<td><input data-id="'+data.memberId+'" type="checkbox"></td>';
+                html += '<td ondblclick="fn_detail(`'+data.memberId+'`)">'+data.memberId+'</td>';
+                html += '<td>'+data.memberNm+'</td>';
+                html += '<td>'+data.sex+'</td>';
+                html += '<td>'+data.country+'</td>';
+                html += '<td>'+data.city+'</td>';
+                html += '</tr>';
+                $('#data_tbody').append(html);
+            }
+            paging();
+        }
+    });
+} */
 var fn_list = function() {
   var param = {};
   param.memberId = $('#memberId').val();
@@ -270,7 +337,7 @@ var fn_list = function() {
           html += "<tr onclick='editRow(this)''>";
         }
         html += '<td><input data-id="' + data.memberId + '" type="checkbox"></td>';
-        html += '<td>' + data.memberId + '</td>';
+        html += '<td ondblclick="fn_detail(`'+data.memberId+'`)">'+data.memberId+'</td>';
         html += '<td>' + data.memberNm + '</td>';
         html += '<td>' + data.sex + '</td>';
         html += '<td>' + data.country + '</td>';
@@ -281,10 +348,32 @@ var fn_list = function() {
       paging();
     }
   });
-}
+} 
 
 // 상세
-var fn_detail = function(memberId) {
+// 상세
+var fn_detail = function (memberId) {
+    $('.pop').addClass('on');
+    $('#modifyId').val(memberId);
+
+    $.ajax({
+        url	:'/member/detail.json',
+        type:'POST',
+        data:{memberId : memberId},
+	    success: function(res) {
+
+            $('#mMemberId').val(res.memberId);
+            $('#mMemberNm').val(res.memberNm);
+
+            res.sex === 'male' ? $('#mMale').prop('checked',true) : $('#mFemale').prop('checked',true);
+
+            $('#mCountry').val(res.country).trigger('change');
+            $('#mCity').val(res.city);
+
+        }
+    });
+}
+/* var fn_detail = function(memberId) {
   $('.pop').addClass('on');
   $('#modifyId').val(memberId);
 
@@ -306,9 +395,10 @@ var fn_detail = function(memberId) {
 
     }
   });
-}
+} */
 
-//저장
+
+ //저장
 var fn_save = function(flag) {
 
   let items = $('table').find('.newRowNum');
@@ -415,7 +505,7 @@ var fn_save = function(flag) {
 	    });
   	}
 
-  	if(editItems.length > 0){
+  	/* if(editItems.length > 0){
 	    $.ajax({
 	      url: '/member/update.json',
 	      type: 'POST',
@@ -432,7 +522,7 @@ var fn_save = function(flag) {
 	        }
 	      }
 	    });
-  	}
+  	} */
   }
 }
 
@@ -537,7 +627,7 @@ function sexChange(obj) {
 }
 
 //row 수정
-function editRow(obj) {
+/* function editRow(obj) {
   if ($(obj).hasClass("editRow") === false) {
     $(obj).addClass('editRow');
 
@@ -586,11 +676,11 @@ function editRow(obj) {
       $('#sCity' + trNum)[0].sumo.selectItem(item);
     });
   }
-}
+} */
 
 //페이징
 function paging() {
-  var rowPerPage = 20;
+  var rowPerPage = 5;
   $('#nav').remove();
   var $members = $('#members');
   $members.after('<div id="nav" style="margin: auto;">');

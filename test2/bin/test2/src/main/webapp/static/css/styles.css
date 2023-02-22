@@ -59,10 +59,10 @@
     }
 
     table .male {
-      background: #f4f4f4 !important;
+      background: #b3b4e1!important;
     }
     table .female {
-      background: #ffffff !important;
+      background: #aee296!important;
     }
 
 .form-control {
@@ -104,7 +104,7 @@ h2{
   margin-right: 10px;
   font-family:Tahoma;
   background: #ccc;
-  color: #000;
+  color: #ffffff;
   text-decoration: none;
 }
 #nav a.active {

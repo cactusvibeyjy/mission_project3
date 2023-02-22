@@ -1,27 +1,37 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <section name="Workbench">
 	<section name="org.eclipse.ui.texteditor.FindReplaceDialog">
-		<item key="selection" value="20"/>
+		<item key="selection" value="fn_save(&apos;m&apos;)"/>
 		<item key="wrap" value="true"/>
-		<item key="casesensitive" value="false"/>
+		<item key="casesensitive" value="true"/>
 		<item key="wholeword" value="false"/>
 		<item key="incremental" value="false"/>
 		<item key="isRegEx" value="false"/>
 		<list key="findhistory">
-			<item value="20"/>
-			<item value="sCity"/>
-			<item value="국가"/>
-			<item value="fn_addRow"/>
-			<item value="fn_edit"/>
-			<item value="checkbox"/>
-			<item value="fn_allCheck"/>
+			<item value="fn_save(&apos;m&apos;)"/>
+			<item value="fn_dupCheck"/>
+			<item value="아이디"/>
+			<item value="아이디가"/>
+			<item value="city"/>
+			<item value="닫기"/>
+			<item value="fn_hide"/>
+			<item value="editRow(this)"/>
+			<item value="table-active"/>
+			<item value="editRow"/>
+			<item value="nav"/>
+			<item value="members"/>
+			<item value="paging"/>
+			<item value="overflow"/>
+			<item value="10"/>
 		</list>
 		<list key="replacehistory">
+			<item value="fn_cancel"/>
+			<item value=""/>
 		</list>
 	</section>
 	<section name="org.eclipse.ui.texteditor.FindReplaceDialog_dialogBounds">
-		<item key="DIALOG_X_ORIGIN" value="1048"/>
-		<item key="DIALOG_Y_ORIGIN" value="397"/>
+		<item key="DIALOG_X_ORIGIN" value="1409"/>
+		<item key="DIALOG_Y_ORIGIN" value="369"/>
 		<item key="DIALOG_WIDTH" value="340"/>
 		<item key="DIALOG_HEIGHT" value="454"/>
 		<item key="DIALOG_FONT_NAME" value="1|맑은 고딕|9.0|0|WINDOWS|1|-15|0|0|0|400|0|0|0|1|0|0|0|0|맑은 고딕"/>
